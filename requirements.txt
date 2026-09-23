@@ -1,0 +1,7 @@
+chromadb
+sentence-transformers
+langgraph
+fastapi
+uvicorn
+pydantic
+langchain-groq

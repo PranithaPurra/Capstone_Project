@@ -1,62 +1,110 @@
-# Titanic Analytics and Machine Learning
+# Zepto Support Assistant
 
 ## Overview
 
-This module performs exploratory data analysis and machine learning using the Titanic dataset.
+This module implements an offline-first support assistant for Zepto policy questions.
 
-The dataset is saved as `titanic.csv` as an offline fallback.
+It uses local embeddings, ChromaDB retrieval, LangGraph orchestration, Pydantic validation and FastAPI.
 
-## Files
+## Architecture
 
-- analytics_01_EDA.ipynb
-- analytics_02_modeling.ipynb
-- titanic.csv
+```text
+Zepto Policy Documents
+        ↓
+Sentence Transformer
+        ↓
+ChromaDB
+        ↓
+User Query
+        ↓
+LangGraph
+        ↓
+classify_intent
+        ↓
+retrieve_and_answer / direct_answer
+        ↓
+Pydantic Response
+        ↓
+FastAPI
+```
 
-## EDA
+## Policy Corpus
 
-- Dataset loading and profiling
-- Missing-value analysis
-- Age histogram and box plot
-- Fare histogram and box plot
-- IQR outlier detection
-- Fare mean, median and mode
-- Survival rate by sex
-- Survival rate by passenger class
-- Survival rate by sex and passenger class
-- Age vs survival analysis
-- Correlation matrix
-- Correlation heatmap
-- Exploratory z-score standardization
+The module contains eight policy documents:
 
-## Classification
+- doc_01.txt
+- doc_02.txt
+- doc_03.txt
+- doc_04.txt
+- doc_05.txt
+- doc_06.txt
+- doc_07.txt
+- doc_08.txt
 
-Models used:
-- Logistic Regression
-- Decision Tree
-- Random Forest
+## Embeddings
 
-Evaluation includes:
-- Accuracy
-- Precision
-- Recall
-- F1-score
-- Confusion Matrix
-- ROC-AUC
+Uses `sentence-transformers/all-MiniLM-L6-v2`.
 
-## Class Imbalance
+Document embeddings are stored in ChromaDB.
 
-- Baseline
-- class_weight='balanced'
-- SMOTE
+## LangGraph
 
-## Random Forest Tuning
+The graph contains three nodes:
+- classify_intent
+- retrieve_and_answer
+- direct_answer
 
-GridSearchCV is used for Random Forest tuning with OOB score evaluation.
+Conditional routing sends policy questions to retrieval and other questions to the direct-answer path.
 
-## Fare Regression
+## Mock Mode
 
-Fare regression includes MAE, RMSE, R² and Adjusted R², along with residual analysis.
+The application uses deterministic mock mode by default.
 
-## Model Persistence
+`MOCK_LLM=1`
 
-The best classification pipeline is saved and reloaded using Joblib.
+## API
+
+### POST /ask
+
+Request:
+
+```json
+{"query": "How much does delivery cost?"}
+```
+
+Response fields:
+- answer
+- sources
+- confidence
+
+### GET /health
+
+Returns the application health status.
+
+## Docker
+
+Build:
+
+```bash
+docker build -t zepto-support-assistant .
+```
+
+Run:
+
+```bash
+docker run -p 7860:7860 zepto-support-assistant
+```
+
+## Requirements
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Run:
+
+```bash
+uvicorn main:app --host 0.0.0.0 --port 7860
+```
