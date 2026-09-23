@@ -1,0 +1,54 @@
+# Data Pipeline
+
+## Overview
+
+This module collects book data from Books to Scrape, cleans the scraped information, converts prices from GBP to INR, and stores the data in a normalized SQLite database.
+
+## Technologies
+- Python
+- Requests
+- BeautifulSoup
+- Pandas
+- SQLite
+
+## Pipeline
+
+```text
+Books to Scrape → Web Scraping → Data Cleaning → GBP to INR → SQLite → SQL Queries
+```
+
+## Data Fields
+
+- title
+- price
+- price_gbp
+- star_rating
+- availability
+- category
+- price_inr
+
+## Database
+
+The notebook creates a normalized SQLite database named `zepto_books.db`.
+
+The database contains:
+- categories
+- books
+
+Primary-key and foreign-key relationships are used.
+
+## SQL Operations
+
+- SELECT
+- WHERE
+- ORDER BY
+- LIMIT
+- DISTINCT
+- IN / BETWEEN
+- JOIN
+
+SQL results are loaded using `pd.read_sql()` and compared with Pandas merge results.
+
+## Notebook
+
+Run `data_pipeline.ipynb` to recreate the workflow.
