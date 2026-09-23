@@ -1,54 +1,62 @@
-# Data Pipeline
+# Titanic Analytics and Machine Learning
 
 ## Overview
 
-This module collects book data from Books to Scrape, cleans the scraped information, converts prices from GBP to INR, and stores the data in a normalized SQLite database.
+This module performs exploratory data analysis and machine learning using the Titanic dataset.
 
-## Technologies
-- Python
-- Requests
-- BeautifulSoup
-- Pandas
-- SQLite
+The dataset is saved as `titanic.csv` as an offline fallback.
 
-## Pipeline
+## Files
 
-```text
-Books to Scrape → Web Scraping → Data Cleaning → GBP to INR → SQLite → SQL Queries
-```
+- analytics_01_EDA.ipynb
+- analytics_02_modeling.ipynb
+- titanic.csv
 
-## Data Fields
+## EDA
 
-- title
-- price
-- price_gbp
-- star_rating
-- availability
-- category
-- price_inr
+- Dataset loading and profiling
+- Missing-value analysis
+- Age histogram and box plot
+- Fare histogram and box plot
+- IQR outlier detection
+- Fare mean, median and mode
+- Survival rate by sex
+- Survival rate by passenger class
+- Survival rate by sex and passenger class
+- Age vs survival analysis
+- Correlation matrix
+- Correlation heatmap
+- Exploratory z-score standardization
 
-## Database
+## Classification
 
-The notebook creates a normalized SQLite database named `zepto_books.db`.
+Models used:
+- Logistic Regression
+- Decision Tree
+- Random Forest
 
-The database contains:
-- categories
-- books
+Evaluation includes:
+- Accuracy
+- Precision
+- Recall
+- F1-score
+- Confusion Matrix
+- ROC-AUC
 
-Primary-key and foreign-key relationships are used.
+## Class Imbalance
 
-## SQL Operations
+- Baseline
+- class_weight='balanced'
+- SMOTE
 
-- SELECT
-- WHERE
-- ORDER BY
-- LIMIT
-- DISTINCT
-- IN / BETWEEN
-- JOIN
+## Random Forest Tuning
 
-SQL results are loaded using `pd.read_sql()` and compared with Pandas merge results.
+GridSearchCV is used for Random Forest tuning with OOB score evaluation.
 
-## Notebook
+## Fare Regression
 
-Run `data_pipeline.ipynb` to recreate the workflow.
+Fare regression includes MAE, RMSE, R² and Adjusted R², along with residual analysis.
+
+## Model Persistence
+
+The best classification pipeline is saved and reloaded using Joblib.
